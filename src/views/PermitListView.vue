@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: "PlateListView",
+  name: "PermitListView",
 
   components: {}
 };

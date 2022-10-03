@@ -7,16 +7,16 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "plateList",
+    name: "permitList",
     component: PlateListView
   },
   {
-    path: "/addPlate",
-    name: "addPlate",
+    path: "/addPermit",
+    name: "addPermit",
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ "../views/AddPlateView.vue")
+    component: () => import(/* webpackChunkName: "about" */ "../views/addPermit.vue")
   }
 ];
 
