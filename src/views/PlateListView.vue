@@ -3,10 +3,9 @@
 </template>
 
 <script>
-  export default {
-    name: 'PlateListView',
-    
-    components: {
-    },
-  }
+export default {
+  name: "PlateListView",
+
+  components: {}
+};
 </script>
