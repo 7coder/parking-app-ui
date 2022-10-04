@@ -19,9 +19,9 @@
                 <v-text-field v-model="licencePlate" label="License plate" required></v-text-field>
               </v-col>
 
-              <v-col cols="6"> DataPicker component </v-col>
+              <v-col cols="6"> <DatePicker></DatePicker> </v-col>
 
-              <v-col cols="6"> DataPicker component </v-col>
+              <v-col cols="6"> <DatePicker></DatePicker> </v-col>
 
               <v-col cols="12">
                 <v-text-field v-model="ownerName" label="Owner name"></v-text-field>
@@ -40,6 +40,8 @@
 </template>
 
 <script>
+import DatePicker from "@/components/DatePicker.vue";
+
 const COUNTRIES = [
   {
     code: "DE",
@@ -62,6 +64,7 @@ const COUNTRIES = [
 export default {
   name: "AddPermitView",
   data: () => ({}),
+  components: { DatePicker },
   computed: {
     plateIssuerCountry() {
       return COUNTRIES;
