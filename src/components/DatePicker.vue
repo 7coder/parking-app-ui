@@ -1,7 +1,7 @@
 <template>
   <v-menu
-    ref="menu1"
-    v-model="menu1"
+    ref="menu"
+    v-model="menu"
     :close-on-content-click="false"
     transition="scale-transition"
     offset-y
@@ -10,44 +10,48 @@
   >
     <template v-slot:activator="{ on, attrs }">
       <v-text-field
-        v-model="dateFormatted"
+        :value="dateFormatted"
         label="Date"
         hint="MM/DD/YYYY format"
         persistent-hint
         prepend-icon="mdi-calendar"
         v-bind="attrs"
-        @blur="date = parseDate(dateFormatted)"
         v-on="on"
       ></v-text-field>
     </template>
-    <v-date-picker v-model="date" no-title @input="menu1 = false"></v-date-picker>
+    <v-date-picker :value="date" no-title @input="setDateFromPicker($event)"></v-date-picker>
   </v-menu>
 </template>
 
 <script>
 export default {
   name: "DatePicker",
-  data: (vm) => ({
-    date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10),
-    dateFormatted: vm.formatDate(
-      new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10)
-    ),
-    menu1: false,
-    menu2: false
+  props: {
+    name: {
+      type: String,
+      required: true
+    },
+    state: {
+      type: String,
+      required: true
+    },
+    getter: {
+      type: String,
+      requred: true
+    }
+  },
+  data: () => ({
+    menu: false
   }),
 
   computed: {
-    computedDateFormatted() {
+    dateFormatted() {
       return this.formatDate(this.date);
-    }
-  },
-
-  watch: {
+    },
     date() {
-      this.dateFormatted = this.formatDate(this.date);
+      return this.$store.getters[`${this.state}/${this.getter}`];
     }
   },
-
   methods: {
     formatDate(date) {
       if (!date) return null;
@@ -60,6 +64,19 @@ export default {
 
       const [month, day, year] = date.split("/");
       return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+    },
+    setDateFromPicker(date) {
+      this.menu = false;
+      this.setField({
+        name: this.name,
+        value: date
+      });
+    },
+    setField(fieldObject) {
+      this.$store.dispatch(`${this.state}/setField`, fieldObject);
+    },
+    setDate(e) {
+      this.setDateFromPicker(this.parseDate(e.target.value));
     }
   }
 };
