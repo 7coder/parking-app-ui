@@ -3,7 +3,7 @@
     <v-row justify="center">
       <v-col cols="6">
         <h2 class="text-center mb-2 mt-2">Add new permit 📄</h2>
-        <v-form @submit.prevent="onSubmit">
+        <v-form @submit.prevent="onSubmit" ref="form" v-model="valid">
           <v-container>
             <v-row>
               <v-col cols="6">
@@ -14,17 +14,23 @@
                   label="Country"
                   :value="plateIssuerCountry"
                   @change="setAutoCompliteField"
+                  class="required-field"
                 ></v-autocomplete>
               </v-col>
 
               <v-col cols="6">
                 <v-text-field
+                  ref="licensePlateNumberRef"
                   :value="licensePlateNumber"
                   name="licensePlateNumber"
                   label="License plate"
                   clearable
                   validate-on-blur
+                  :rules="plateRules"
                   @input.native="setInputField($event)"
+                  class="required-field"
+                  :hint="licencePlateHint"
+                  persistent-hint
                 ></v-text-field>
               </v-col>
 
@@ -53,7 +59,7 @@
 
               <v-col class="text-center">
                 <v-btn class="mr-5" @click="onClearForm">Clear Form</v-btn>
-                <v-btn color="success" type="submit">Add Permit</v-btn>
+                <v-btn color="success" type="submit" :disabled="!valid">Add Permit</v-btn>
               </v-col>
             </v-row>
           </v-container>
@@ -66,6 +72,8 @@
 <script>
 import { mapGetters } from "vuex";
 
+import { isPlateValid } from "@/helpers/plateValidator";
+
 import DatePicker from "@/components/DatePicker.vue";
 
 const COUNTRIES = [
@@ -74,7 +82,7 @@ const COUNTRIES = [
     label: "Germany"
   },
   {
-    code: "F",
+    code: "FR",
     label: "France"
   },
   {
@@ -87,13 +95,38 @@ const COUNTRIES = [
   }
 ];
 
+const plateFormats = {
+  DE: "X X 1234",
+  FR: "XX-123-XX",
+  CH: "XX 123456",
+  AT: "AB 123CDE"
+};
+
 export default {
   name: "AddPermitView",
-  data: () => ({}),
+  data: () => ({
+    valid: false
+  }),
   components: { DatePicker },
   computed: {
     plateIssuerCountries() {
       return COUNTRIES;
+    },
+    plateRules() {
+      let that = this;
+
+      if (!that.plateIssuerCountry) return [(v) => (v && v.length) || "Please fill the field"];
+
+      return [
+        (v) =>
+          isPlateValid(that.plateIssuerCountry, v) ||
+          `Incorrect format data for ${that.plateIssuerCountry} region`
+      ];
+    },
+    licencePlateHint() {
+      if (!this.plateIssuerCountry) return "Please specify the Country";
+
+      return `Please enter the plate with the format ${plateFormats[this.plateIssuerCountry]}`;
     },
     ...mapGetters({
       plateIssuerCountry: "permitCreation/getPlateIssuerCountry",
@@ -124,6 +157,20 @@ export default {
     onClearForm() {
       this.$store.dispatch("permitCreation/clearForm");
     }
+  },
+  watch: {
+    plateIssuerCountry(to, from) {
+      if (from && from !== to) {
+        this.$refs.form.validate();
+      }
+    }
   }
 };
 </script>
+
+<style>
+.required-field.v-input .v-label::after {
+  content: " *";
+  color: rgb(177, 30, 30);
+}
+</style>
