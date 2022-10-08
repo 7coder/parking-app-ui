@@ -1,6 +1,6 @@
 <template>
   <div>
-    <search-component></search-component>
+    <search-component store="permits"></search-component>
     <v-data-table
       :headers="headers"
       :items="permits"
