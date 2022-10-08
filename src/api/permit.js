@@ -1,4 +1,5 @@
-import { postReq } from "@/helpers/http";
-import { PERMIT_SAVE_URL } from "@/config/constants";
+import { getRq, postReq } from "@/helpers/http";
+import { PERMITS_URL } from "@/config/constants";
 
-export const savePermit = (permit) => postReq(PERMIT_SAVE_URL, permit);
+export const savePermit = (permit) => postReq(PERMITS_URL, permit);
+export const findPermitsByQuery = (query) => getRq(`${PERMITS_URL}?${query}`);
