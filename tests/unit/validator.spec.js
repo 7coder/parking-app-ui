@@ -44,6 +44,10 @@ describe("Plate validation", () => {
     it("should return false when plate has incorrect format: MM11111", () => {
       expect(isPlateValid("DE", "MM11111")).toBeFalsy();
     });
+
+    it("should return false when plate has incorrect format: M M M 1", () => {
+      expect(isPlateValid("DE", "M M M 1")).toBeFalsy();
+    });
   });
 
   describe("for FR region", () => {

@@ -12,6 +12,7 @@
                   item-text="label"
                   item-value="code"
                   label="Country"
+                  :rules="plateIssuerCountryRules"
                   :value="plateIssuerCountry"
                   @change="setAutoCompliteField"
                   class="required-field"
@@ -25,7 +26,6 @@
                   name="licensePlateNumber"
                   label="License plate"
                   clearable
-                  validate-on-blur
                   :rules="plateRules"
                   @input.native="setInputField($event)"
                   class="required-field"
@@ -112,14 +112,17 @@ export default {
     plateIssuerCountries() {
       return COUNTRIES;
     },
+    plateIssuerCountryRules() {
+      return [(v) => !!(v && v.length) || "Please specify the country"];
+    },
     plateRules() {
       let that = this;
 
-      if (!that.plateIssuerCountry) return [(v) => (v && v.length) || "Please fill the field"];
+      if (!that.plateIssuerCountry) return ["Please fill the Country field"];
 
       return [
         (v) =>
-          isPlateValid(that.plateIssuerCountry, v) ||
+          (v && isPlateValid(that.plateIssuerCountry, v)) ||
           `Incorrect format data for ${that.plateIssuerCountry} region`
       ];
     },
