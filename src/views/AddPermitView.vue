@@ -155,7 +155,7 @@ export default {
       this.$store.dispatch("permitCreation/setField", fieldObject);
     },
     onSubmit() {
-      //...
+      this.$store.dispatch("permitCreation/saveForm");
     },
     onClearForm() {
       this.$store.dispatch("permitCreation/clearForm");

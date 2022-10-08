@@ -1,3 +1,5 @@
+import { savePermit } from "@/api/permit";
+
 const getCurrentDate = () =>
   new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().substr(0, 10);
 
@@ -26,6 +28,13 @@ export default {
     },
     clearForm({ commit }) {
       commit("RESET_STATE");
+    },
+    saveForm({ state }) {
+      savePermit(state)
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((e) => console.log(e));
     }
   },
   getters: {
