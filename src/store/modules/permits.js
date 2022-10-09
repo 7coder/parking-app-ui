@@ -1,4 +1,4 @@
-import { findPermitsByQuery } from "@/api/permit";
+import { findPermitsByQuery, getAllPermits } from "@/api/permit";
 
 export default {
   namespaced: true,
@@ -17,6 +17,13 @@ export default {
           permits: data
         })
       );
+    },
+    getAllPermits({ commit }) {
+      getAllPermits().then((data) => {
+        commit("SET_PERMITS", {
+          permits: data
+        });
+      });
     }
   },
   getters: {

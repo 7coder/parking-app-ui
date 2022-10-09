@@ -12,11 +12,15 @@
 
 <script>
 import SearchComponent from "@/components/Search.vue";
+import { mapGetters } from "vuex";
 
 export default {
   name: "PermitListView",
 
   components: { SearchComponent },
+  mounted() {
+    this.$store.dispatch("permits/getAllPermits");
+  },
   data: () => ({
     headers: [
       {
@@ -29,37 +33,12 @@ export default {
       { text: "Start Date", value: "startDate" },
       { text: "End Date", value: "endDate" },
       { text: "Owner", value: "ownerName" }
-    ],
-    permits: [
-      {
-        licensePlateNumber: "M M 1",
-        plateIssuerCountry: "DE",
-        startDate: "2022-12-12",
-        endDate: "2022-12-13",
-        ownerName: "Max Mustermann"
-      },
-      {
-        licensePlateNumber: "AA-123-AA",
-        plateIssuerCountry: "FR",
-        startDate: "2022-12-12",
-        endDate: "2022-12-13",
-        ownerName: "Jean Dupont"
-      },
-      {
-        licensePlateNumber: "SD 12345",
-        plateIssuerCountry: "CH",
-        startDate: "2022-12-12",
-        endDate: "2022-12-13",
-        ownerName: "Erika Mustermann"
-      },
-      {
-        licensePlateNumber: "AT 123",
-        plateIssuerCountry: "AT",
-        startDate: "2022-12-12",
-        endDate: "2022-12-13",
-        ownerName: "Krethi Musterfrau"
-      }
     ]
-  })
+  }),
+  computed: {
+    ...mapGetters({
+      permits: "permits/getPermits"
+    })
+  }
 };
 </script>
