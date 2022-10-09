@@ -11,7 +11,7 @@
           ></v-select>
         </v-col>
         <v-col cols="7">
-          <v-text-field v-model="query" label="Search"></v-text-field>
+          <v-text-field v-model="query" label="Search" clearable></v-text-field>
         </v-col>
         <v-col cols="2">
           <v-btn class="mt-3" @click="onSearch" color="primary"
@@ -56,6 +56,13 @@ export default {
     onSearch() {
       if (!this.query.length) return;
       this.$store.dispatch(`${this.store}/searchPermits`, `${this.queryKey}=${this.query}`);
+    }
+  },
+  watch: {
+    query(to, from) {
+      if (from && to === null) {
+        this.$store.dispatch(`${this.store}/getAllPermits`);
+      }
     }
   }
 };

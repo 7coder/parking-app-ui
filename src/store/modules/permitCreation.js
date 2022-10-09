@@ -29,12 +29,13 @@ export default {
     clearForm({ commit }) {
       commit("RESET_STATE");
     },
-    saveForm({ state }) {
+    saveForm({ state, commit }) {
       savePermit(state)
-        .then((data) => {
-          console.log(data);
+        .then(() => {
+          commit("RESET_STATE");
+          window.alert("Saved");
         })
-        .catch((e) => console.log(e));
+        .catch((e) => window.alert(e.message));
     }
   },
   getters: {
